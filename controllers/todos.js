@@ -9,8 +9,6 @@ module.exports = {
             console.log(todoItems);
             const itemsLeft = await Todo.countDocuments({userId:req.user.id,completed: false})
             res.render('todos.ejs', {todos: todoItems, left: itemsLeft, user: req.user})
-            
-    
 
         }catch(err){
             console.log(err)
@@ -19,25 +17,7 @@ module.exports = {
     createTodo: async (req, res)=>{
 
         try{
-            if(req.body.todoItem === "" || req.body.todoDate === null){
-                
-            }
-            const currDate = req.body.todoDate;
-            const dueDate = req.body.dueDate;
-            let color = '';
-
-            //Equal to today
-            if (currDate === dueDate){
-                color = 'urgent';
-            }
-            else if (currDate < dueDate){
-                color = 'priority1';            //By a day
-            }
-            else {
-                color = 'priority2';
-            }
-            await Todo.create({todo: req.body.todoItem, completed: false, userId: req.user.id, dueDate: req.body.todoDate, colorClass: color})
-
+            const item = await Todo.create({todo: req.body.todoItem, completed: false, userId: req.user.id, dueDate: req.body.todoDate})
             console.log('Todo has been added!')
             res.redirect('/todos')
         }catch(err){
